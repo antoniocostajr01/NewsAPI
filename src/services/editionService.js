@@ -63,4 +63,17 @@ const fetchAndSaveEdition = async () => {
     }
 };
 
-module.exports = fetchAndSaveEdition;
+const getLatestFromDB = async () => {
+    console.log("Searching latest edition from MongoDB...");
+    try{
+        const latestEdition = await Edition.findOne()
+        .sort({date: -1})
+        .exec();
+
+        return latestEdition;
+    } catch (error) {
+        console.error("Error trying to find latest edition:", error)
+    }
+};
+
+module.exports = {fetchAndSaveEdition, getLatestFromDB};
