@@ -1,8 +1,13 @@
+require('dotenv').config();
 const express = require('express');
+const mongoose = require('mongoose');
+
 const editionRouter = require("./src/router/editionRouter");
 
 const app = express();
 const port = 3000;
+
+const MONGO_URI = process.env.MONGO_URI;
 
 app.use(express.json());
 
@@ -13,6 +18,18 @@ app.get('/', (req, res) => {
 
 })
 
-app.listen(port, () =>{
-    console.log(`API running on port ${port}`)
-})
+
+
+///TODO: Move this structure to config file and just import a function
+mongoose.connect(MONGO_URI)
+    .then(()=> {
+        console.log('MongoDB connected');
+
+        app.listen(port, () =>{
+            console.log(`API running on port ${port}`)
+        }) 
+    })
+    .catch((err) => {
+        console.log('ERRO trying to connect to MongoDB');
+    })
+
